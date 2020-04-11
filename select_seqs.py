@@ -128,7 +128,7 @@ for i in range(1,index+1):
             if percentage >= 10:
                 reject[shorter_seq] = "Overlaps with itself elsewhere: " + str(percentage_digits)
 
-# Loop back over the sequecnes and start to print them out
+# Loop back over the sequences and start to print them out
 # We always do this and print out the top 150 sequencces - or until we run out of sequences
 for i in range(1,index+1):  
     # if it's acceptable and we have written <= 150 so far write this one as well
