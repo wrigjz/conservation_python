@@ -36,7 +36,10 @@ echo "Clustering using cdhit and selecting the sequences"
 $cdhitdir/cd-hit -i ./homologues.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 
 echo "Rejecting some sequences"
-python3 ../$scripts/select_seqs.py wild.fasta cdhit.out 300
+python3 ../$scripts/select_seqs.py wild.fasta cdhit.out
+
+# Here you get to choose either the accepted150 or accepted300 files for aligning
+/bin/ln -s accepted300.fasta accepted.fasta
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
