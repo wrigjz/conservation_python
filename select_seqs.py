@@ -5,11 +5,11 @@
 # and have a length 60% or over compared with with the target
 # It also checks if the same homologue is used twice and if there is an overlap of > 10% the shorter
 # sequence is rejected
-# It then prints out the top 150 hits, if there are less than 150 left it prints all of thosee too
-# if there are more than 150 left then it picks 150 of those left-overs randomly
+# It then prints out the top 150 hits, if there are less than 150 left it prints all of thosee too to accepted150.fasta
+# if there are more than 150 left then it picks 150 of those left-overs randomly with the top 150 to accepted300.fasta
 
 # usage:
-# python3 select_seqs.py reference.fasta homologues.fasta [150|300]
+# python3 select_seqs.py reference.fasta homologues.fasta
 
 import os
 import sys
@@ -18,22 +18,16 @@ import decimal
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 
-if len(sys.argv) < 4:
-    print ("Please give reference fasta file, the homologues fasta file and then either 150 or 300 depending on if you want just the top 150 matches or the top 150 + another 150 randomly choosen matches")
-    exit()
-if sys.argv[3] == "150":
-    print("Taking the top 150 matches")
-elif sys.argv[3] == "300":
-    print("Taking the top 150 and then another 150 random ones from the other matches")
-else:
-    print ("Please give reference fasta file, the homologues fasta file and then either 150 or 300 depending on if you want just the top 150 matches or the top 150 + another 150 randomly choosen matches")
+if len(sys.argv) != 3:
+    print ("Please give reference fasta file and the homologues fasta file.")
     exit()
 
 TARGETFILE=open(sys.argv[1],"r")
 INFILE=open(sys.argv[2],"r")
-METHOD=sys.argv[3]
-PREALIGN=open("accepted.fasta","w")
+PREALIGN150=open("accepted150.fasta","w")
+PREALIGN300=open("accepted300.fasta","w")
 REJECT=open("rejected.fasta","w")
+NOTUSED=open("notchosen.fasta","w")
 
 # Intial setup is for 100000 sequences
 title       = []
@@ -63,10 +57,14 @@ TARGETFILE.close()
 target_len = len(sequence[0])
 
 # Write out the target sequence first
-PREALIGN.write(title[0])
-PREALIGN.write("\n")
-PREALIGN.write(sequence[0])
-PREALIGN.write("\n")
+PREALIGN150.write(title[0])
+PREALIGN150.write("\n")
+PREALIGN150.write(sequence[0])
+PREALIGN150.write("\n")
+PREALIGN300.write(title[0])
+PREALIGN300.write("\n")
+PREALIGN300.write(sequence[0])
+PREALIGN300.write("\n")
 
 # Now read in the cdhit output and save to title[1] ++ and sequence[1] ++ and short_title[1] ++
 for LINE in INFILE:
@@ -133,10 +131,14 @@ for i in range(1,index+1):
 for i in range(1,index+1):  
     # if it's acceptable and we have written <= 150 so far write this one as well
     if reject[i] == "Acceptable" and total_aligns_written < 150:
-        PREALIGN.write(title[i])
-        PREALIGN.write("\n")
-        PREALIGN.write(sequence[i])
-        PREALIGN.write("\n")
+        PREALIGN150.write(title[i])
+        PREALIGN150.write("\n")
+        PREALIGN150.write(sequence[i])
+        PREALIGN150.write("\n")
+        PREALIGN300.write(title[i])
+        PREALIGN300.write("\n")
+        PREALIGN300.write(sequence[i])
+        PREALIGN300.write("\n")
         reject[i] = "Done"    # Mark this one as being DONE
         total_aligns_written += 1
     # If it's a reject write to the reject file and give a reason
@@ -162,34 +164,47 @@ for i in range(1,index+1):
         REJECT.write("\n")
 
 
-# At this point if asked we will randomly choose 150 from the reconsider group, unless there are < 150 of them
+# At this point we can close the 150 and 300 files
+PREALIGN150.close()
+REJECT.close()
+
+# At this point we will randomly choose 150 from the reconsider group, unless there are < 150 of them
 # in which case we'll take them all
 
-if METHOD == "300": # Only use this if reconsider number is > 0
-   if reconsider > 0 and reconsider <= 150:  # less than 150, but over 0 loop over the entire set looking for "R" and use them all
-      print("Using all")
-      for i in range(1,index+1):
-           if reject[i] == "Reconsider":
-               PREALIGN.write(title[i])
-               PREALIGN.write("\n")
-               PREALIGN.write(sequence[i])
-               PREALIGN.write("\n")
-               reject[i] = "Done"  # Mark this one as DONE
+if reconsider > 0 and reconsider <= 150:  # less than 150, but over 0 loop over the entire set looking for "R" and use them all
+    print("Using all")
+    for i in range(1,index+1):
+        if reject[i] == "Reconsider":
+            PREALIGN300.write(title[i])
+            PREALIGN300.write("\n")
+            PREALIGN300.write(sequence[i])
+            PREALIGN300.write("\n")
+            reject[i] = "Done"  # Mark this one as DONE
 
 # If there are more than 150, then we will pick ones at random, check if they are Done, Reconsider or rejectss (a number != 0)
 # if reconsider we use them and then set them to done "Done"
-   elif reconsider > 150 :
-       print("Reconsidering")
-       reconsider_loop = 1
-       while reconsider_loop <= 150:
-            picked = random.randint(1,index+1)
-            if reject[picked] == "Reconsider":
-               PREALIGN.write(title[picked])
-               PREALIGN.write("\n")
-               PREALIGN.write(sequence[picked])
-               PREALIGN.write("\n")
-               reject[picked] = "Done"  # Mark this one as DONE
-               reconsider_loop += 1
+elif reconsider > 150 :
+    print("Reconsidering")
+    reconsider_loop = 1
+    while reconsider_loop <= 150:
+        picked = random.randint(1,index+1)
+        if reject[picked] == "Reconsider":
+            PREALIGN300.write(title[picked])
+            PREALIGN300.write("\n")
+            PREALIGN300.write(sequence[picked])
+            PREALIGN300.write("\n")
+            reject[picked] = "Done"  # Mark this one as DONE
+            reconsider_loop += 1
 
-PREALIGN.close()
-REJECT.close()
+# Close the 300 file
+PREALIGN300.close()
+
+# Now print out the not-choosen sequences
+for i in range(1,index+1):
+    if reject[i] == "Reconsider":
+        NOTUSED.write(title[i])
+        NOTUSED.write("\n")
+        NOTUSED.write(sequence[i])
+        NOTUSED.write("\n")
+# Close the notchosen file
+NOTUSED.close()
