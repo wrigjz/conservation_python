@@ -42,3 +42,26 @@ $rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment150.aln -z
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s150.res initial150.grades
+
+# Save the consurf300 data
+mv assemtle.txt assemble300.txt
+mv initial.grades initial300.grades
+mv wild_consurf.txt wild_consurf300.txt
+mv results_ambnum.txt results_ambnum300.txt
+mv results.txt results300.txt
+
+# Pull all the data togeather
+python $scripts/get_consurf_home.py initial150.grades wild_consurf150.txt
+ln -s wild_consurf150.txt wild_consurf.txt
+python3 $scripts/assemble_data.py >| assemble.txt
+
+# Get the stable/unstabla and results in the PDB numbering scheme
+/bin/rm -rf results_ambnum.txt results.txt
+$scripts/set_numbers.sh
+python3 $scripts/find_stable_unstable.py >| results_ambnum.txt
+PYTHONPATH=. python3 $scripts/print_results.py >| results.txt
+
+rm wild_consurf.txt
+mv assemble.txt assemble150.txt
+mv results_ambnum.txt results_ambnum150.txt
+mv results.txt results150.txt
