@@ -11,7 +11,7 @@ mafftdir=/home/programs/mafft-7.294/
 rate4sitedir=/home/programs/rate4site-3.0.0/src/rate4site/
 prottestdir=/home/programs/prottest-3.4.2
 consscripts=../consurf_scripts
-critiscripts=../criti_scripts
+critiscripts=../critires_scripts
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
