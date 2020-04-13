@@ -10,7 +10,8 @@ cdhitdir=/home/programs/cd-hit-v4.6.8-2017-0621
 mafftdir=/home/programs/mafft-7.294/
 rate4sitedir=/home/programs/rate4site-3.0.0/src/rate4site/
 prottestdir=/home/programs/prottest-3.4.2
-scripts=consurf_scripts
+consscripts=../consurf_scripts
+critiscripts=../criti_scripts
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
@@ -41,25 +42,25 @@ echo "Running rate4site and grading the scores"
 $rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment150.aln -zn $rate_model -bn -l ./r4s150.log -o ./r4s150.res  -x r4s150.txt >| r4s150.out
 
 # Turn those scores into grades
-PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s150.res initial150.grades
+PYTHONPATH=. python3 $consscripts/r4s_to_grades.py r4s150.res initial150.grades
 
 # Save the consurf300 data
-mv assemtle.txt assemble300.txt
+mv assemble.txt assemble300.txt
 mv initial.grades initial300.grades
 mv wild_consurf.txt wild_consurf300.txt
 mv results_ambnum.txt results_ambnum300.txt
 mv results.txt results300.txt
 
 # Pull all the data togeather
-python $scripts/get_consurf_home.py initial150.grades wild_consurf150.txt
+python $critiscripts/get_consurf_home.py initial150.grades wild_consurf150.txt
 ln -s wild_consurf150.txt wild_consurf.txt
-python3 $scripts/assemble_data.py >| assemble.txt
+python3 $critiscripts/assemble_data.py >| assemble.txt
 
 # Get the stable/unstabla and results in the PDB numbering scheme
 /bin/rm -rf results_ambnum.txt results.txt
-$scripts/set_numbers.sh
-python3 $scripts/find_stable_unstable.py >| results_ambnum.txt
-PYTHONPATH=. python3 $scripts/print_results.py >| results.txt
+$critiscripts/set_numbers.sh
+python3 $critiscripts/find_stable_unstable.py >| results_ambnum.txt
+PYTHONPATH=. python3 $critiscripts/print_results.py >| results.txt
 
 rm wild_consurf.txt
 mv assemble.txt assemble150.txt
