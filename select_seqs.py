@@ -36,9 +36,10 @@ sequence    = []
 reject      = []  # Done = Accepted and written, Reconsider = available for reconsideration, 
                                               # A number other than 0 is the percentage for rejection
                                               # Acceptable means it's not a reject
-index       = -1
-total_aligns_written = 0
-reconsider = 0
+index                = -1
+total_aligns_written =  0
+reconsider           =  0
+no_rejected          =  0
 
 # Read in the target seqeunce to title[0] and sequence[0]
 for LINE in TARGETFILE:
@@ -55,16 +56,6 @@ for LINE in TARGETFILE:
         sequence[index] = sequence[index] + LINE
 TARGETFILE.close()
 target_len = len(sequence[0])
-
-# Write out the target sequence first
-PREALIGN150.write(title[0])
-PREALIGN150.write("\n")
-PREALIGN150.write(sequence[0])
-PREALIGN150.write("\n")
-PREALIGN300.write(title[0])
-PREALIGN300.write("\n")
-PREALIGN300.write(sequence[0])
-PREALIGN300.write("\n")
 
 # Now read in the cdhit output and save to title[1] ++ and sequence[1] ++ and short_title[1] ++
 for LINE in INFILE:
@@ -93,10 +84,13 @@ for i in range(1,index+1):
         overlap_digits = round(overlap,2)
         if percentage <= float(35):   # Reject not enough seqid
             reject[i] = "Too Low: " + str(percentage_digits)
+            no_rejected += 1
         elif percentage >= float(95): # Reject too much seqid
             reject[i] = "Too High: " + str(percentage_digits)
+            no_rejected += 1
         elif overlap <= float(60):    # Reject for lack of overlap
             reject[i] = "Too Short: " + str(overlap_digits)
+            no_rejected += 1
 
 # At this point we need to check the short Uniref anmesm if there is a match with another
 # Get the two lenghts, align shorter with longer, get percentage
@@ -125,6 +119,23 @@ for i in range(1,index+1):
             percentage_digits = round(percentage,2)
             if percentage >= 10:
                 reject[shorter_seq] = "Overlaps with itself elsewhere: " + str(percentage_digits)
+                no_rejected += 1
+
+# If there are not enough homologues, min of 5, we stop at this point
+no_left = index - no_rejected
+if no_left < 5:
+    print("Not enough homologues for conservation analysis: ",index)
+    exit()
+
+# Write out the target sequence first
+PREALIGN150.write(title[0])
+PREALIGN150.write("\n")
+PREALIGN150.write(sequence[0])
+PREALIGN150.write("\n")
+PREALIGN300.write(title[0])
+PREALIGN300.write("\n")
+PREALIGN300.write(sequence[0])
+PREALIGN300.write("\n")
 
 # Loop back over the sequences and start to print them out
 # We always do this and print out the top 150 sequencces - or until we run out of sequences
@@ -151,7 +162,7 @@ for i in range(1,index+1):
         REJECT.write(sequence[i])
         REJECT.write("\n")
     # If we have written >150 and this one is also acceptable mark it for later consideration
-    elif total_aligns_written >= 150:
+    elif reject[i] == "Acceptable" and total_aligns_written >= 150:
         reject[i] = "Reconsider"
         reconsider += 1
     else: # Anything else gets rejected - really should not see this though
@@ -162,7 +173,6 @@ for i in range(1,index+1):
         REJECT.write("\n")
         REJECT.write(sequence[i])
         REJECT.write("\n")
-
 
 # At this point we can close the 150 and 300 files
 PREALIGN150.close()
@@ -187,7 +197,7 @@ elif reconsider > 150 :
     print("Reconsidering")
     reconsider_loop = 1
     while reconsider_loop <= 150:
-        picked = random.randint(1,index+1)
+        picked = random.randint(151,index)
         if reject[picked] == "Reconsider":
             PREALIGN300.write(title[picked])
             PREALIGN300.write("\n")
