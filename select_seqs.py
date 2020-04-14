@@ -122,8 +122,8 @@ for i in range(1,index+1):
                 no_rejected += 1
 
 # If there are not enough homologues, min of 5, we stop at this point
-no_left = index - no_rejected
-if no_left < 5:
+number_left = index - no_rejected
+if number_left < 5:
     print("Not enough homologues for conservation analysis: ",index)
     exit()
 
@@ -138,7 +138,7 @@ PREALIGN300.write(sequence[0])
 PREALIGN300.write("\n")
 
 # Loop back over the sequences and start to print them out
-# We always do this and print out the top 150 sequencces - or until we run out of sequences
+# We always do this and print out the top 150 acceptable sequencces - or until we run out of sequences
 for i in range(1,index+1):  
     # if it's acceptable and we have written <= 150 so far write this one as well
     if reject[i] == "Acceptable" and total_aligns_written < 150:
@@ -181,7 +181,7 @@ REJECT.close()
 # At this point we will randomly choose 150 from the reconsider group, unless there are < 150 of them
 # in which case we'll take them all
 
-if reconsider > 0 and reconsider <= 150:  # less than 150, but over 0 loop over the entire set looking for "R" and use them all
+if reconsider > 0 and reconsider <= 150:  # less than 150, but over 0 loop over the entire set looking for them
     print("Using all")
     for i in range(1,index+1):
         if reject[i] == "Reconsider":
@@ -195,9 +195,9 @@ if reconsider > 0 and reconsider <= 150:  # less than 150, but over 0 loop over 
 # if reconsider we use them and then set them to done "Done"
 elif reconsider > 150 :
     print("Reconsidering")
-    reconsider_loop = 1
-    while reconsider_loop <= 150:
-        picked = random.randint(151,index)
+    reconsider_loop = 0
+    while reconsider_loop < 150:
+        picked = random.randint(150,index) # we can start at 150
         if reject[picked] == "Reconsider":
             PREALIGN300.write(title[picked])
             PREALIGN300.write("\n")
