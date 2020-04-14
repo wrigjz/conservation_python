@@ -16,7 +16,7 @@ scripts=consurf_scripts
 
 # Remove output from previous runs
 echo "Creating Fasta file"
-/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln 
+/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta
 /bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
 # generate the fasta file
