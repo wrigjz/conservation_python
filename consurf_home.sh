@@ -71,3 +71,10 @@ $rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
+
+# Save the consurf300sp data
+mv assemble.txt assemble300sp.txt
+mv initial.grades initial300sp.grades
+mv wild_consurf.txt wild_consurf300sp.txt
+mv results_ambnum.txt results_ambnum300sp.txt
+mv results.txt results300sp.txt
