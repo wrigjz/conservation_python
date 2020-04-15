@@ -39,7 +39,7 @@ echo "Rejecting some sequences"
 python3 ../$scripts/select_seqs.py wild.fasta cdhit.out
 
 # Here you get to choose either the accepted150 or accepted300 files for aligning
-/bin/ln -s accepted300.fasta accepted.fasta
+/bin/ln -s accepted300sp.fasta accepted.fasta
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
