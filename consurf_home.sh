@@ -38,8 +38,8 @@ $cdhitdir/cd-hit -i ./homologues.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 echo "Rejecting some sequences"
 python3 ../$scripts/select_seqs.py wild.fasta cdhit.out
 
-# Here you get to choose either the accepted150 or accepted300 files for aligning
-/bin/ln -s accepted300sp.fasta accepted.fasta
+# Here you get to choose either the accepted150top or accepted150sp files for aligning
+/bin/ln -s accepted150sp.fasta accepted.fasta
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
@@ -71,10 +71,3 @@ $rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
-
-# Save the consurf300sp data
-mv assemble.txt assemble300sp.txt
-mv initial.grades initial300sp.grades
-mv wild_consurf.txt wild_consurf300sp.txt
-mv results_ambnum.txt results_ambnum300sp.txt
-mv results.txt results300sp.txt

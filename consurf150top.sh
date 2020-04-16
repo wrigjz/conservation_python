@@ -55,7 +55,7 @@ $critiscripts/set_numbers.sh
 python3 $critiscripts/find_stable_unstable.py >| results_ambnum.txt
 PYTHONPATH=. python3 $critiscripts/print_results.py >| results.txt
 
-rm wild_consurf.txt
-mv assemble.txt assemble150top.txt
-mv results_ambnum.txt results_ambnum150top.txt
-mv results.txt results150top.txt
+/bin/rm wild_consurf.txt
+/bin/mv assemble.txt assemble150top.txt
+/bin/mv results_ambnum.txt results_ambnum150top.txt
+/bin/mv results.txt results150top.txt

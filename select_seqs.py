@@ -8,10 +8,6 @@
 # of > 10% the shorter sequence is rejected
 # It then prints out the top 150 hits, if there are less than 150 it prints all
 # of thosee too to accepted150top.fasta
-# It then prints out the top 300 hits, if there are less than 300 it prints all
-# of thosee too to accepted300top.fasta
-# It then prints out an even spread of 150 hits to the accetped150sp.fasta file
-# It then prints out an even spread of 300 hits to the accetped300sp.fasta file
 
 # usage:
 # python3 select_seqs.py reference.fasta cdhit.out
@@ -27,9 +23,7 @@ if len(sys.argv) != 3:
 TARGETFILE = open(sys.argv[1], "r")
 INFILE = open(sys.argv[2], "r")
 PREALIGN150TOP = open("accepted150top.fasta", "w")
-PREALIGN300TOP = open("accepted300top.fasta", "w")
 PREALIGN150SP = open("accepted150sp.fasta", "w")
-PREALIGN300SP = open("accepted300sp.fasta", "w")
 REJECTFILE = open("rejected.fasta", "w")
 
 # Intial setup is for 100000 sequences
@@ -136,18 +130,10 @@ PREALIGN150TOP.write(MERGED_LIST_ACC[0][0])
 PREALIGN150TOP.write("\n")
 PREALIGN150TOP.write(MERGED_LIST_ACC[0][1])
 PREALIGN150TOP.write("\n")
-PREALIGN300TOP.write(MERGED_LIST_ACC[0][0])
-PREALIGN300TOP.write("\n")
-PREALIGN300TOP.write(MERGED_LIST_ACC[0][1])
-PREALIGN300TOP.write("\n")
 PREALIGN150SP.write(MERGED_LIST_ACC[0][0])
 PREALIGN150SP.write("\n")
 PREALIGN150SP.write(MERGED_LIST_ACC[0][1])
 PREALIGN150SP.write("\n")
-PREALIGN300SP.write(MERGED_LIST_ACC[0][0])
-PREALIGN300SP.write("\n")
-PREALIGN300SP.write(MERGED_LIST_ACC[0][1])
-PREALIGN300SP.write("\n")
 
 # If there are < 150 remaining, write them all out
 if REMAINING <= 150:
@@ -159,11 +145,7 @@ if REMAINING <= 150:
     # Close the other files and copy this file to all the other accepted files
     PREALIGN150TOP.close()
     PREALIGN150SP.close()
-    PREALIGN300TOP.close()
-    PREALIGN300SP.close()
     shutil.copyfile("accepted150top.fasta", "accepted150sp.fasta")
-    shutil.copyfile("accepted150top.fasta", "accepted300top.fasta")
-    shutil.copyfile("accepted150top.fasta", "accepted300sp.fasta")
 
 # Write out the top 150 file if there are more than 150 accepted homologue
 if REMAINING > 150:
@@ -181,36 +163,6 @@ if REMAINING > 150:
         PREALIGN150SP.write("\n")
     PREALIGN150TOP.close()
     PREALIGN150SP.close()
-
-# If the number of accepted homologues is between 150 and 300 we just write out all of them
-# and copy that to the 300 even spread file
-if 150 < REMAINING <= 300:
-    for i in range(1, REMAINING):
-        PREALIGN300TOP.write(MERGED_LIST_ACC[i][0])
-        PREALIGN300TOP.write("\n")
-        PREALIGN300TOP.write(MERGED_LIST_ACC[i][1])
-        PREALIGN300TOP.write("\n")
-    # Close the 300 even spread file and copy this file to it
-    PREALIGN300TOP.close()
-    PREALIGN300SP.close()
-    shutil.copyfile("accepted300top.fasta", "accepted300sp.fasta")
-
-# Write out the top 300 file if there are more than 300 accetped homologues
-if REMAINING > 300:
-    for i in range(1, 301):  # Write out the top 300
-        PREALIGN300TOP.write(MERGED_LIST_ACC[i][0])
-        PREALIGN300TOP.write("\n")
-        PREALIGN300TOP.write(MERGED_LIST_ACC[i][1])
-        PREALIGN300TOP.write("\n")
-    # Here we try to write out 300 that evenly sample the REMAINING homologues
-    INTERVAL = int(REMAINING / 300) # Calculate the interval for the 300 samples
-    for i in range(1, REMAINING, INTERVAL):
-        PREALIGN300SP.write(MERGED_LIST_ACC[i][0])
-        PREALIGN300SP.write("\n")
-        PREALIGN300SP.write(MERGED_LIST_ACC[i][1])
-        PREALIGN300SP.write("\n")
-    PREALIGN300TOP.close()
-    PREALIGN300SP.close()
 
 # Loop back over the rejected sequences and print them out with a reason
 for i in range(0, REJECTED):
