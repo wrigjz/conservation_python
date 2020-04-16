@@ -38,9 +38,6 @@ $cdhitdir/cd-hit -i ./homologues.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 echo "Rejecting some sequences"
 python3 ../$scripts/select_seqs.py wild.fasta cdhit.out
 
-# Here you get to choose either the accepted150top or accepted150sp files for aligning
-/bin/ln -s accepted150sp.fasta accepted.fasta
-
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
 $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --clustalout --namelength 30 ./accepted.fasta >| ./postalignment.aln

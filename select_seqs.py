@@ -6,8 +6,8 @@
 # with the target
 # It also checks if the same homologue is used twice and if there is an overlap
 # of > 10% the shorter sequence is rejected
-# It then prints out the top 150 hits, if there are less than 150 it prints all
-# of thosee too to accepted150top.fasta
+# It then prints out 150 evenly sampled hits, if there are less than 150 it prints all
+# of thosee too to accepted.fasta
 
 # usage:
 # python3 select_seqs.py reference.fasta cdhit.out
@@ -22,8 +22,7 @@ if len(sys.argv) != 3:
 
 TARGETFILE = open(sys.argv[1], "r")
 INFILE = open(sys.argv[2], "r")
-PREALIGN150TOP = open("accepted150top.fasta", "w")
-PREALIGN150SP = open("accepted150sp.fasta", "w")
+PREALIGN = open("accepted.fasta", "w")
 REJECTFILE = open("rejected.fasta", "w")
 
 # Intial setup is for 100000 sequences
@@ -126,43 +125,31 @@ if REMAINING < 4:
     exit()
 
 # Write out the target SEQUENCE first to each of the accepted files
-PREALIGN150TOP.write(MERGED_LIST_ACC[0][0])
-PREALIGN150TOP.write("\n")
-PREALIGN150TOP.write(MERGED_LIST_ACC[0][1])
-PREALIGN150TOP.write("\n")
-PREALIGN150SP.write(MERGED_LIST_ACC[0][0])
-PREALIGN150SP.write("\n")
-PREALIGN150SP.write(MERGED_LIST_ACC[0][1])
-PREALIGN150SP.write("\n")
+PREALIGN.write(MERGED_LIST_ACC[0][0])
+PREALIGN.write("\n")
+PREALIGN.write(MERGED_LIST_ACC[0][1])
+PREALIGN.write("\n")
 
 # If there are < 150 remaining, write them all out
 if REMAINING <= 150:
     for i in range(1, REMAINING):
-        PREALIGN150TOP.write(MERGED_LIST_ACC[i][0])
-        PREALIGN150TOP.write("\n")
-        PREALIGN150TOP.write(MERGED_LIST_ACC[i][1])
-        PREALIGN150TOP.write("\n")
-    # Close the other files and copy this file to all the other accepted files
-    PREALIGN150TOP.close()
-    PREALIGN150SP.close()
-    shutil.copyfile("accepted150top.fasta", "accepted150sp.fasta")
+        PREALIGN.write(MERGED_LIST_ACC[i][0])
+        PREALIGN.write("\n")
+        PREALIGN.write(MERGED_LIST_ACC[i][1])
+        PREALIGN.write("\n")
 
 # Write out the top 150 file if there are more than 150 accepted homologue
 if REMAINING > 150:
-    for i in range(1, 151): # Write out the top 150
-        PREALIGN150TOP.write(MERGED_LIST_ACC[i][0])
-        PREALIGN150TOP.write("\n")
-        PREALIGN150TOP.write(MERGED_LIST_ACC[i][1])
-        PREALIGN150TOP.write("\n")
     # Here we try to write out 150 that evenly sample the remaining homologues
     INTERVAL = int(REMAINING /150) # Calculate the interval for the 150 samples
     for i in range(1, REMAINING, INTERVAL):
-        PREALIGN150SP.write(MERGED_LIST_ACC[i][0])
-        PREALIGN150SP.write("\n")
-        PREALIGN150SP.write(MERGED_LIST_ACC[i][1])
-        PREALIGN150SP.write("\n")
-    PREALIGN150TOP.close()
-    PREALIGN150SP.close()
+        PREALIGN.write(MERGED_LIST_ACC[i][0])
+        PREALIGN.write("\n")
+        PREALIGN.write(MERGED_LIST_ACC[i][1])
+        PREALIGN.write("\n")
+
+# Close the prealign file
+PREALIGN.close()
 
 # Loop back over the rejected sequences and print them out with a reason
 for i in range(0, REJECTED):
