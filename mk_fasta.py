@@ -42,8 +42,8 @@ RESIDUETAB = {
     'HIP' : 'H',
     'HID' : 'H',
     'HIE' : 'H',
-    'ACE' : 'X',
-    'NME' : 'X',
+    'ACE' : '',
+    'NME' : '',
 }
 
 # Get the output name from the command line
@@ -77,7 +77,7 @@ for TMLINE in INFILE:
                 print (single, end = "")
             else: 
                 print (".", end = "")
-            if single !="X": 
+            if single !="":
                 r4sindex+=1
                 outline = "    '" + "{:>d}".format(r4sindex) + "' : '" + "{:>d}".format(index) + "' ,\n"
                 OUTFILE.write(outline)
