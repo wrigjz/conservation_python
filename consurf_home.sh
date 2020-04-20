@@ -16,7 +16,7 @@ scripts=consurf_scripts
 
 # Remove output from previous runs
 echo "Creating Fasta file"
-/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta
+/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp
 /bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
 # generate the fasta file
@@ -27,9 +27,12 @@ echo "Jackhmmering the Uniref90 DB"
 $hmmerdir/binaries/jackhmmer -E 0.0001 --domE 0.0001 --incE 0.0001 -N 1 \
         -o wild_hmmer.out -A uniref90_list.txt wild.fasta $dbdir/uniref90.fasta
 
+# Remove the PDB_ATOM entry - probably not needed but good to do anyway
+grep -v PDB_ATOM uniref90_list.txt >| uniref.tmp
+
 # Retrieve the sequences that Jackhmmer found
 echo "Reformating the sequences from the Uniref90 DB"
-$hmmerdir/binaries/esl-reformat fasta uniref90_list.txt >| homologues.fasta
+$hmmerdir/binaries/esl-reformat fasta uniref.tmp >| homologues.fasta
 
 # Run cd-hit to cluster everything to remove duplicates at the 95% level
 echo "Clustering using cdhit and selecting the sequences"
