@@ -1,5 +1,10 @@
 #!/bin/bash
-
+#########################################################################################################################
+## Jon Wright, IBMS, Academia Sinica, Taipei, 11529, Taiwan
+## These files are licensed under the GLP ver 3, essentially you have the right
+## to copy, modify and distribute this script but all modifications must be offered
+## back to the original authors
+#########################################################################################################################
 #
 # A simple script to replciate Consurf for a provided single chain pdb file called wild_min.pdb
 # with a chain id of X, this is a post amber minimized pdb file
