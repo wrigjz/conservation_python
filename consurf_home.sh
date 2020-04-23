@@ -49,6 +49,8 @@ python3 ../$scripts/select_seqs.py wild.fasta cdhit.out
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
 $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --clustalout --namelength 30 ./accepted.fasta >| ./postalignment.aln
+$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --namelength 30  ./accepted.fasta >| prop.fasta
+python3 ../$scripts/get_propensities.py prop.fasta >| prop.txt
 
 # Get the best protein matrix
 echo "Running Prottest"
