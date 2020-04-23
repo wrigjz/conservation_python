@@ -21,8 +21,8 @@ scripts=consurf_scripts
 
 # Remove output from previous runs
 echo "Creating Fasta file"
-/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp
-/bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
+/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp frequency.aln consurf_home.grades
+/bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out frequency.txt
 
 # generate the fasta file
 python3 ../$scripts/mk_fasta.py wild_mini.pdb >| wild.fasta
@@ -49,8 +49,8 @@ python3 ../$scripts/select_seqs.py wild.fasta cdhit.out
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
 $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --clustalout --namelength 30 ./accepted.fasta >| ./postalignment.aln
-$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --namelength 30  ./accepted.fasta >| prop.fasta
-python3 ../$scripts/get_propensities.py prop.fasta >| prop.txt
+$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --namelength 30  ./accepted.fasta >| frequency.aln
+python3 ../$scripts/get_frequency.py frequency.aln >| frequency.txt
 
 # Get the best protein matrix
 echo "Running Prottest"
@@ -78,3 +78,4 @@ $rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
+paste initial.grades frequency.txt > consurf_home.grades
