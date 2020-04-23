@@ -6,13 +6,12 @@
 ## back to the original authors
 #########################################################################################################################
 #
-# A simple script to replciate Consurf for a provided single chain pdb file
-# with a chain id of X, this is a post amber minimized pdb file
+# A simple script to replciate Consurf for a provided single chain fasta file
 
 # Usage consurf_home file.pdb
 
 if [ "$#" -ne 1 ]; then
-    echo "Please give a (and only one) pdbfile"
+    echo "Please give a (and only one) fasta format file"
     exit 1
 fi
 
@@ -27,21 +26,21 @@ rate4sitedir=/home/programs/rate4site-3.0.0/src/rate4site/
 prottestdir=/home/programs/prottest-3.4.2
 scripts=consurf_scripts
 
+# Extract the title line from the fasta file
+longtitle=`grep ^> $1`
+title="${longtitle:1}"
+
 # Remove output from previous runs
-echo "Creating Fasta file"
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp frequency.aln consurf_home.grades
 /bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out frequency.txt
-
-# generate the fasta file
-python3 ../$scripts/mk_fasta.py $1  >| $1.fasta
 
 # Jackhmmer the blast database looking for homologues
 echo "Jackhmmering the Uniref90 DB"
 $hmmerdir/binaries/jackhmmer -E 0.0001 --domE 0.0001 --incE 0.0001 -N 1 \
-        -o $1_hmmer.out -A uniref90_list.txt $1.fasta $dbdir/uniref90.fasta
+        -o $1\_hmmer.out -A uniref90_list.txt $1 $dbdir/uniref90.fasta
 
-# Remove the PDB_ATOM entry - probably not needed but good to do anyway
-grep -v PDB_ATOM uniref90_list.txt >| uniref.tmp
+# Remove the target entry - probably not needed but good to do anyway
+grep -v "$title" uniref90_list.txt >| uniref.tmp
 
 # Retrieve the sequences that Jackhmmer found
 echo "Reformating the sequences from the Uniref90 DB"
@@ -82,7 +81,7 @@ fi
 
 # Run the rate4site to ge the sconsurf scores
 echo "Running rate4site and grading the scores"
-$rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $rate_model -bn -l ./r4s.log -o ./r4s.res  -x r4s.txt >| r4s.out
+$rate4sitedir/rate4site_doublerep -ib -a "$title" -s ./postalignment.aln -zn $rate_model -bn -l ./r4s.log -o ./r4s.res  -x r4s.txt >| r4s.out
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
