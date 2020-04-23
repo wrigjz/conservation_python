@@ -5,11 +5,21 @@
 ## back to the original authors
 #########################################################################################################################
 This is an implimentation of the consurf system
-It takes a single chain pdb file called wild_mini.pdb (often provided from critires)
+It takes a single chain pdb file (often provided from critires) or a single chain fasta file
 It uses 150 evenly sampled acceptable homologues 
 
 To run you need a directory structure such as
 
 /top/consurf_scripts
     /pdbidchain    e.g. 1fnfa
-    /pdbidchain/wild_mini.pdb    - a single chain pdb file
+    /pdbidchain/file.pdb    - a single chain pdb file
+    or
+    /pdbidchain/file.fasta  - a single chain fasta file
+
+then run it if you have a pdb file as:
+   $consurf_scripts/consurf_pdb.sh file.pdb
+
+then run it if you have a fasta file as:
+   $consurf_scripts/consurf_fasta.sh file.fasta
+
+
