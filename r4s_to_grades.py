@@ -57,7 +57,7 @@ width = lowest / -4.5
 from r4s_pdb import R4S_2_PDB 
 
 # Write out the output file headers
-outline="  # SEQ 3LETT PDB COLOUR  SCORE\n"
+outline="  # SEQ 3LETT PDB COLOUR  SCORE \n"
 OUTFILE.write(outline)
 
 #Set up the 9 bins ranges - not bin 1 doesn't have an upper range
