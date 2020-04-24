@@ -11,8 +11,8 @@
 
 # Usage consurf_home file.pdb
 
-if [ "$#" -ne 1 ]; then
-    echo "Please give a (and only one) pdbfile"
+if [ "$#" -ne 2 ]; then
+    echo "Please give a pdbfile or fasta file and then either P or F to tell the script which sort it is"
     exit 1
 fi
 
@@ -30,18 +30,27 @@ scripts=consurf_scripts
 # Remove output from previous runs
 echo "Creating Fasta file"
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
-/bin/rm -rf frequency.aln consurf_home.grades frequency.txt
+/bin/rm -rf frequency.aln consurf_home.grades frequency.txt cons.fasta
 /bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
-# generate the fasta file
-python3 ../$scripts/mk_fasta.py $1  >| $1.fasta
+if [ $2 -eq "P" ]; then
+    # generate the fasta file from the given pdb file
+    python3 ../$scripts/mk_fasta.py $1  >| cons.fasta
+elif [ $2 -eq "F" ]; then
+    # Copy the given fasta sequence to cons.fasta and give it the title PDB_ATOM
+    echo '>PDB_ATOM' >| cons.fasta
+    grep -v '^v' $1 >> cons.fasta
+else 
+    echo "You need to give either P or F as the 2nd argument"
+    exit 1
+fi
 
 # Jackhmmer the blast database looking for homologues
 echo "Jackhmmering the Uniref90 DB"
 $hmmerdir/binaries/jackhmmer -E 0.0001 --domE 0.0001 --incE 0.0001 -N 1 \
-        -o $1_hmmer.out -A uniref90_list.txt $1.fasta $dbdir/uniref90.fasta
+        -o cons_hmmer.out -A uniref90_list.txt cons.fasta $dbdir/uniref90.fasta
 
-# Remove the PDB_ATOM entry - probably not needed but good to do anyway
+# Remove the PDB_ATOM / given fasta entry - probably not needed but good to do anyway
 grep -v PDB_ATOM uniref90_list.txt >| uniref.tmp
 
 # Retrieve the sequences that Jackhmmer found
@@ -53,14 +62,16 @@ echo "Clustering using cdhit and selecting the sequences"
 $cdhitdir/cd-hit -i ./homologues.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 
 echo "Rejecting some sequences"
-python3 ../$scripts/select_seqs.py $1.fasta cdhit.out
+python3 ../$scripts/select_seqs.py cons.fasta cdhit.out
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
 $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --clustalout \
          --namelength 30 ./accepted.fasta >| ./postalignment.aln
-$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --namelength 30  \
-         ./accepted.fasta >| frequency.aln
+$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder \
+         --namelength 30 ./accepted.fasta >| frequency.aln
+
+# Calculate the residue frequencies for homologs aligned to the inital given sequence
 python3 ../$scripts/get_frequency.py frequency.aln >| frequency.txt
 
 # Get the best protein matrix

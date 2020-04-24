@@ -16,10 +16,13 @@ To run you need a directory structure such as
     or
     /pdbidchain/file.fasta  - a single chain fasta file
 
-then run it if you have a pdb file as:
-   $consurf_scripts/consurf_pdb.sh file.pdb
+Usage: consurf_home.sh file P|F
+    where P is for pdb files and F is for fasta files
 
-then run it if you have a fasta file as:
-   $consurf_scripts/consurf_fasta.sh file.fasta
+To run it if you have a pdb file as:
+   $consurf_scripts/consurf_home.sh file.pdb P
+
+To run it if you have a fasta file as:
+   $consurf_scripts/consurf_home.sh file.fasta F
 
 

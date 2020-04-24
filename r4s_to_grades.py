@@ -12,9 +12,14 @@
 # with the last (consurf_grade 9) being open ended so +3.5->infinity
 
 import sys
-#import os
-# Read in the original PDB numbering scheme
-from r4s_pdb import R4S_2_PDB
+import os
+
+# Read in the original PDB numbering scheme if the file exists
+if os.path.exists('r4s_pdb.py'):
+    from r4s_pdb import R4S_2_PDB
+    WAS_A_PDB = 1
+else:
+    WAS_A_PDB = 0
 
 INFILE = open(sys.argv[1], "r")
 OUTFILE = open(sys.argv[2], "w")
@@ -66,7 +71,10 @@ for LINE in INFILE:
         continue
     resnum, resname, in3, *junk = [x.strip() for x in LINE.split()] # Read in Res Name/Num/Score
     score = float(in3)
-    original = (R4S_2_PDB.get(resnum)) # get the 'original' resnumber from the initial pdb file
+    if WAS_A_PDB == 1:
+        original = (R4S_2_PDB.get(resnum)) # get the 'original' resnumber from the initial pdb file
+    else:
+        original = resnum # We had a fasta file so no original number
     threeletter = (RESIDUETAB.get(resname)) # Get the three letter code
 
     # now take each score and test it against the coloured bins for consurf grades
