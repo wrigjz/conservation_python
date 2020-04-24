@@ -41,7 +41,7 @@ if [ $extension == "pdb" ]; then
 elif [ $extension == "fasta" ]; then
     # Copy the given fasta sequence to cons.fasta and give it the title PDB_ATOM
     echo '>PDB_ATOM' >| cons.fasta
-    grep -v '^v' $1 >> cons.fasta
+    grep -v '^>' $1 >> cons.fasta
 else 
     echo "You need to give either P or F as the 2nd argument"
     exit 1
