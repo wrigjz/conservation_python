@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 ###################################################################################################
-## and Jon Wright, IBMS, Academia Sinica, Taipei, 11529, Taiwan
+## Jon Wright, IBMS, Academia Sinica, Taipei, 11529, Taiwan
 ## These files are licensed under the GLP ver 3, essentially you have the right
 ## to copy, modify and distribute this script but all modifications must be offered
 ## back to the original authors
 ##################################################################################################
+#
 # This script reads a target input (arg1) and a cdhit fasta output file (arg2)
 # it then does a pairwise alignment, it accepts alignmensts that are between
 # 35-95% seqid with the target  and have a length 60% or over compared with

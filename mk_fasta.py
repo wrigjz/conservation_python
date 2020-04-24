@@ -1,11 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 ###################################################################################################
-## and Jon Wright, IBMS, Academia Sinica, Taipei, 11529, Taiwan
+## Jon Wright, IBMS, Academia Sinica, Taipei, 11529, Taiwan
 ## These files are licensed under the GLP ver 3, essentially you have the right
 ## to copy, modify and distribute this script but all modifications must be offered
 ## back to the original authors
 ###################################################################################################
-#This take a PDB file and then creates a file with a fasta format for a single chain
+#
+# This take a PDB file and then creates a file with a fasta format for a single chain
 # It will ouput ACE/NME as X
 # and write another file that allows for the final consurf numbering
 # to be related back to the initial PDB file

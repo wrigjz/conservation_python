@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 ###################################################################################################
-## and Jon Wright, IBMS, Academia Sinica, Taipei, 11529, Taiwan
+## Jon Wright, IBMS, Academia Sinica, Taipei, 11529, Taiwan
 ## These files are licensed under the GLP ver 3, essentially you have the right
 ## to copy, modify and distribute this script but all modifications must be offered
 ## back to the original authors
 ###################################################################################################
-
-
+#
 # This script reads a target input (arg1) and the aligned sequences
 # It then reports how many residues are aligned with each residue in the PDB_ATOM line
 # It also keeps a count of how common each residue type is at each point and prints them out
