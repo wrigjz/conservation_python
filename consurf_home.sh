@@ -30,7 +30,7 @@ scripts=consurf_scripts
 # Remove output from previous runs
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
 /bin/rm -rf frequency.aln consurf_home.grades frequency.txt cons.fasta
-/bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
+/bin/rm -rf homologs.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
 # Work out if we are doing a pdb file or a fasta file
 extension="${1#*.}"
@@ -47,7 +47,7 @@ else
     exit 1
 fi
 
-# Jackhmmer the blast database looking for homologues
+# Jackhmmer the blast database looking for homologs
 echo "Jackhmmering the Uniref90 DB"
 $hmmerdir/binaries/jackhmmer -E 0.0001 --domE 0.0001 --incE 0.0001 -N 1 \
         -o cons_hmmer.out -A uniref90_list.txt cons.fasta $dbdir/uniref90.fasta
@@ -57,11 +57,11 @@ grep -v PDB_ATOM uniref90_list.txt >| uniref.tmp
 
 # Retrieve the sequences that Jackhmmer found
 echo "Reformating the sequences from the Uniref90 DB"
-$hmmerdir/binaries/esl-reformat fasta uniref.tmp >| homologues.fasta
+$hmmerdir/binaries/esl-reformat fasta uniref.tmp >| homologs.fasta
 
 # Run cd-hit to cluster everything to remove duplicates at the 95% level
 echo "Clustering using cdhit and selecting the sequences"
-$cdhitdir/cd-hit -i ./homologues.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
+$cdhitdir/cd-hit -i ./homologs.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 
 echo "Rejecting some sequences"
 python3 ../$scripts/select_seqs.py cons.fasta cdhit.out

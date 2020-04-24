@@ -23,7 +23,7 @@ import sys
 from Bio import pairwise2
 
 if len(sys.argv) != 3:
-    print("Please give reference fasta file and the homologues fasta file.")
+    print("Please give reference fasta file and the homologs fasta file.")
     exit()
 
 TARGETFILE = open(sys.argv[1], "r")
@@ -125,9 +125,9 @@ MERGED_LIST_REJ = list(filter(lambda a: a[2] != "Acceptable", MERGED_LIST_ORIG))
 REMAINING = len(MERGED_LIST_ACC)
 REJECTED = len(MERGED_LIST_REJ)
 
-# If there are not enough homologues, min of 5, we stop at this point
+# If there are not enough homologs, min of 5, we stop at this point
 if REMAINING < 4:
-    print("Not enough homologues for conservation analysis: ", INDEX, REMAINING)
+    print("Not enough homologs for conservation analysis: ", INDEX, REMAINING)
     exit()
 
 # Write out the target SEQUENCE first to each of the accepted files
@@ -146,7 +146,7 @@ if REMAINING <= 150:
 
 # Write out the top 150 file if there are more than 150 accepted homologue
 if REMAINING > 150:
-    # Here we try to write out 150 that evenly sample the remaining homologues
+    # Here we try to write out 150 that evenly sample the remaining homologs
     INTERVAL = int(REMAINING /150) # Calculate the interval for the 150 samples
     for i in range(1, REMAINING, INTERVAL):
         PREALIGN.write(MERGED_LIST_ACC[i][0])

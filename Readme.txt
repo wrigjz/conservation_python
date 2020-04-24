@@ -7,7 +7,7 @@
 #
 This is an implimentation of the consurf system
 It takes a single chain pdb file (often provided from critires) or a single chain fasta file
-It uses 150 evenly sampled acceptable homologues 
+It uses 150 evenly sampled acceptable homologs 
 
 To run you need a directory structure such as
 
