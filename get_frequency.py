@@ -82,7 +82,6 @@ for LINE in INFILE:
     if LINE[0:1] == ">":
         TITLE.append(0)
         SEQUENCE.append("")
-        POSITION.append("N")  # N for None - if there are amino acids it will become an integer
         INDEX += 1    # increment the index
         TITLE[INDEX], *junk = [x.strip() for x in LINE.split("/")]
     else:
@@ -94,6 +93,7 @@ INFILE.close()
 # 20 amino acids
 ALIGNED_LENGTH = len(SEQUENCE[0])
 for i in range(0, ALIGNED_LENGTH):
+    POSITION.append("N")  # N for None - if there are amino acids it will become an integer
     ALA.append(0)
     CYS.append(0)
     ASP.append(0)
@@ -117,10 +117,10 @@ for i in range(0, ALIGNED_LENGTH):
 
 # At this point look for the non "-" positions in the target sequence and count how many other
 # sequences are not "-" too
-#print(SEQUENCE[0])
+#print(ALIGNED_LENGTH, SEQUENCE[0])
 for i in range(0, ALIGNED_LENGTH):     # Loop over each residues in the target sequence
     if SEQUENCE[0][i] != "-" and SEQUENCE[0][i] != "X":
-        #print(SEQUENCE[0][i])
+        #print(i, SEQUENCE[0][i])
         POSITION[i] = 0
         for j in range(1, INDEX+1):    # Loop over all the other aligned homolog sequences
             if SEQUENCE[j][i] != "-":

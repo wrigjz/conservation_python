@@ -11,8 +11,8 @@
 
 # Usage consurf_home file.pdb
 
-if [ "$#" -ne 2 ]; then
-    echo "Please give a pdbfile or fasta file and then either P or F to tell the script which sort it is"
+if [ "$#" -ne 1 ]; then
+    echo "Please give a pdbfile or fasta file ending in .pdb or .fasta"
     exit 1
 fi
 
@@ -28,15 +28,17 @@ prottestdir=/home/programs/prottest-3.4.2
 scripts=consurf_scripts
 
 # Remove output from previous runs
-echo "Creating Fasta file"
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
 /bin/rm -rf frequency.aln consurf_home.grades frequency.txt cons.fasta
 /bin/rm -rf homologues.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
-if [ $2 -eq "P" ]; then
+# Work out if we are doing a pdb file or a fasta file
+extension="${1#*.}"
+if [ $extension == "pdb" ]; then
     # generate the fasta file from the given pdb file
+    echo "Creating Fasta file"
     python3 ../$scripts/mk_fasta.py $1  >| cons.fasta
-elif [ $2 -eq "F" ]; then
+elif [ $extension == "fasta" ]; then
     # Copy the given fasta sequence to cons.fasta and give it the title PDB_ATOM
     echo '>PDB_ATOM' >| cons.fasta
     grep -v '^v' $1 >> cons.fasta
@@ -101,5 +103,5 @@ $rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $
        -l ./r4s.log -o ./r4s.res  -x r4s.txt >| r4s.out
 
 # Turn those scores into grades
-PYTHONPATH=. python3 ../$scripts/r4s_to_grades_pdb.py r4s.res initial.grades
-paste initial.grades frequency.txt > consurf_home.grades
+PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
+paste initial.grades frequency.txt >| consurf_home.grades
