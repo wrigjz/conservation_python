@@ -12,7 +12,7 @@
 # Usage consurf_home file.pdb
 
 if [ "$#" -ne 1 ]; then
-    echo "Please give a pdbfile or fasta file ending in .pdb or .fasta"
+    echo "Please give just one file, either a pdbfile or fasta file ending in .pdb or .fasta"
     exit 1
 fi
 
