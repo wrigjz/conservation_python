@@ -16,6 +16,15 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
+# Check if we are on the cluster
+if [ -z "$PBS_NODEFILE" ] ; then
+    echo "Non cluster run"
+    threads="1"
+else
+    echo "Cluster run"
+    threads=`wc -l < $PBS_NODEFILE`
+fi
+
 # setup anaconda environment
 source /home/programs/anaconda/linux-5.3.6/init.sh
 dbdir=/scratch/consurf_db
@@ -69,9 +78,9 @@ python3 ../$scripts/select_seqs.py cons.fasta cdhit.out
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
 $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --clustalout \
-         --namelength 30 ./accepted.fasta >| ./postalignment.aln
+  --thread $threads --namelength 30 ./accepted.fasta >| ./postalignment.aln
 $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder \
-         --namelength 30 ./accepted.fasta >| frequency.aln
+  --thread $threads --namelength 30 ./accepted.fasta >| frequency.aln
 
 # Calculate the residue frequencies for homologs aligned to the inital given sequence
 python3 ../$scripts/get_frequency.py frequency.aln >| frequency.txt
@@ -97,10 +106,22 @@ else
     rate_model="-Mj"
 fi
 
-# Run the rate4site to ge the sconsurf scores
+# Run the rate4site to get the sconsurf scores - sometimes this fails and if so we then run
+# the older version which seems to do better but has less options and is far slower
 echo "Running rate4site and grading the scores"
 $rate4sitedir/rate4site_doublerep -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $rate_model -bn \
        -l ./r4s.log -o ./r4s.res  -x r4s.txt >| r4s.out
+
+# Check if rate4site ran okay, if not then we run the older version which lacks "LG" so if protest
+# recommended that we need to change it to "JTT"
+if [ $? -ne 0 ] ; then
+    echo "R4S 3.0 failed so we'll try the older version"
+    if [ "$best_model" == "LG" ] ; then
+        rate_model="-Mj"
+    fi
+    $rate4sitedir/rate4site.old_slow -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $rate_model -bn \
+       -l ./r4s.log -o ./r4s.res  -x r4s.txt >| r4s.out
+fi
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
