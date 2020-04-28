@@ -12,7 +12,7 @@
 # with the target
 # It also checks if the same homologue is used twice and if there is an overlap
 # of > 10% the shorter sequence is rejected
-# It then prints out 150 evenly sampled hits, if there are less than 150 it prints all
+# It then prints out 300 evenly sampled hits, if there are less than 300 it prints all
 # of thosee too to accepted.fasta
 
 # usage:
@@ -136,19 +136,21 @@ PREALIGN.write("\n")
 PREALIGN.write(MERGED_LIST_ACC[0][1])
 PREALIGN.write("\n")
 
-# If there are < 150 remaining, write them all out
-if REMAINING <= 150:
+# If there are < 300 remaining, write them all out
+if REMAINING <= 300:
     for i in range(1, REMAINING):
         PREALIGN.write(MERGED_LIST_ACC[i][0])
         PREALIGN.write("\n")
         PREALIGN.write(MERGED_LIST_ACC[i][1])
         PREALIGN.write("\n")
 
-# Write out the top 150 file if there are more than 150 accepted homologue
-if REMAINING > 150:
-    # Here we try to write out 150 that evenly sample the remaining homologs
-    INTERVAL = int(REMAINING /150) # Calculate the interval for the 150 samples
-    for i in range(1, REMAINING, INTERVAL):
+# Write out the top 300 file if there are more than 300 accepted homologue
+if REMAINING > 300:
+    # Here we try to write out 300 that evenly sample the remaining homologs
+    #INTERVAL = int(REMAINING /300) # Calculate the interval for the 300 samples
+    #for i in range(1, REMAINING, INTERVAL):
+    # Here we write out the top 300
+    for i in range(1, 301):
         PREALIGN.write(MERGED_LIST_ACC[i][0])
         PREALIGN.write("\n")
         PREALIGN.write(MERGED_LIST_ACC[i][1])
