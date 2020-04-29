@@ -6,13 +6,14 @@
 ## back to the original authors
 ###################################################################################################
 #
-# A simple script to replciate Consurf for a provided single chain pdb file
-# with a chain id of X, this is a post amber minimized pdb file
+# A simple script to replciate Consurf it looks at using the SEQRES records
 
-# Usage consurf_home file.pdb
+# Usage consurf_home fileX.pdb
+# Although here we always use original.pdb but we then have to use a pdb file from 
+# THe atom numbers to be able to match with critires later
 
 if [ "$#" -ne 1 ]; then
-    echo "Please give just one file, either a pdbfile or fasta file ending in .pdb or .fasta"
+    echo "Please give just one pdb file - the one we will take the ATOM records from"
     exit 1
 fi
 
@@ -38,28 +39,25 @@ scripts=consurf_scripts
 
 # Remove output from previous runs
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
-/bin/rm -rf frequency.aln consurf_home.grades frequency.txt cons.fasta
+/bin/rm -rf frequency.aln consurf_home.grades frequency.txt seqres.fasta
 /bin/rm -rf homologs.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
-# Work out if we are doing a pdb file or a fasta file
-extension="${1#*.}"
-if [ $extension == "pdb" ]; then
-    # generate the fasta file from the given pdb file
-    echo "Creating Fasta file"
-    python3 ../$scripts/mk_fasta.py $1  >| cons.fasta
-elif [ $extension == "fasta" ]; then
-    # Copy the given fasta sequence to cons.fasta and give it the title PDB_ATOM
-    echo '>PDB_ATOM' >| cons.fasta
-    grep -v '^>' $1 >> cons.fasta
-else 
-    echo "You need to give either .pdn or .fasta file"
-    exit 1
-fi
+# Work out the chain ids
+if [ ! -e "original_chain.txt" ] ; then
+    echo "No orignial_chain.txt file to get the chain id from"
+else
+    chain=`cat original_chain.txt`
+fi 
+
+# generate the fasta file from the given pdb file
+echo "Creating Fasta file"
+python3 ../$scripts/mk_fasta.py $1  >| cons.fasta
+python3 ./mk_fasta_from_seqres.py original.pdb ${chain^}  >| seqres.fasta
 
 # Jackhmmer the blast database looking for homologs
 echo "Jackhmmering the Uniref90 DB"
 $hmmerdir/binaries/jackhmmer -E 0.0001 --domE 0.0001 --incE 0.0001 -N 1 \
-        -o cons_hmmer.out -A uniref90_list.txt cons.fasta $dbdir/uniref90.fasta
+        -o cons_hmmer.out -A uniref90_list.txt seqres.fasta $dbdir/uniref90.fasta
 
 # Remove the PDB_ATOM / given fasta entry - probably not needed but good to do anyway
 grep -v PDB_ATOM uniref90_list.txt >| uniref.tmp
@@ -73,7 +71,7 @@ echo "Clustering using cdhit and selecting the sequences"
 $cdhitdir/cd-hit -i ./homologs.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 
 echo "Rejecting some sequences"
-python3 ../$scripts/select_seqs.py cons.fasta cdhit.out
+python3 ../$scripts/select_seqs.py seqres.fasta cdhit.out
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
@@ -124,5 +122,4 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Turn those scores into grades
-PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
-paste initial.grades frequency.txt >| consurf_home.grades
+PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res seqres.grades

@@ -7,9 +7,11 @@
 ###################################################################################################
 #
 # This take a PDB file and then creates a file with a fasta format for a single chain
-# It will ouput ACE/NME as X
-# and write another file that allows for the final consurf numbering
-# to be related back to the initial PDB file
+# It takes the sequence from the SEQRES recorss not from the ATOM ones
+#
+# Usage:
+# python3 get_fasta_seqres.py file.pdb CHAINID
+# e.g. python3 get_fasta_seqres.py original.pdb A
 
 import sys
 #import os
