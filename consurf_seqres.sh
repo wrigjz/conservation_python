@@ -50,8 +50,9 @@ else
 fi 
 
 # generate the fasta file from the given pdb file
+# We do this twice to help with critires numbering
 echo "Creating Fasta file"
-python3 ../$consscripts/mk_fasta.py $1  >| cons.fasta
+python3 ../$consscripts/mk_fasta.py $1 >| cons.fasta
 python3 ../$consscripts/mk_fasta_from_seqres.py original.pdb ${chain^}  >| seqres.fasta
 
 # Jackhmmer the blast database looking for homologs
