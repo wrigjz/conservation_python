@@ -124,5 +124,5 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Turn those scores into grades
-PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades Y
+PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
 paste initial.grades frequency.txt >| consurf_home.grades
