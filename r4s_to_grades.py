@@ -19,7 +19,7 @@ import os
 if os.path.exists('r4s_pdb.py'):  
     if os.path.exists('seqres.fasta'): # If this exists we ignore the renumber file here
          WAS_A_PDB = 0
-    else
+    else:
     from r4s_pdb import R4S_2_PDB
     WAS_A_PDB = 1
 else:

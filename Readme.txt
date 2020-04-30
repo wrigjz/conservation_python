@@ -17,13 +17,16 @@ To run you need a directory structure such as
     or
     /pdbidchain/file.fasta  - a single chain fasta file
 
-Usage: consurf_home.sh file P|F
-    where P is for pdb files and F is for fasta files
+Usage: consurf_home.sh file
+       consurf_seqres file.pdb
 
 To run it if you have a pdb file as:
-   $consurf_scripts/consurf_home.sh file.pdb P
+   $consurf_scripts/consurf_home.sh file.pdb
 
 To run it if you have a fasta file as:
-   $consurf_scripts/consurf_home.sh file.fasta F
+   $consurf_scripts/consurf_home.sh file.fasta
 
+If you want to use the SEQRES records from the pdb file instead of the ATOM records then:
+   $consurf_scripts/consurf_seqres.sh file.fasta
+Note the numbering will run from 1->X however
 
