@@ -122,4 +122,5 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Turn those scores into grades
-PYTHONPATH=. python3 ../$consscripts/r4s_to_grades.py r4s.res seqres.grades
+PYTHONPATH=. python3 ../$consscripts/r4s_to_grades.py r4s.res seqres.grades N
+paste seqres frequency.txt >| seqres_home.grades

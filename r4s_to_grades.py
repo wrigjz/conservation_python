@@ -25,6 +25,9 @@ else:
 INFILE = open(sys.argv[1], "r")
 OUTFILE = open(sys.argv[2], "w")
 
+if sys.argv[3] == "N":
+    WAS_A_PDB = 0
+
 RESIDUETAB = {
     'A' : 'ALA',
     'C' : 'CYS',
