@@ -124,4 +124,4 @@ fi
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$consscripts/r4s_to_grades.py r4s.res seqres.grades
-paste seqres frequency.txt >| seqres_home.grades
+paste seqres.grades frequency.txt >| seqres_home.grades
