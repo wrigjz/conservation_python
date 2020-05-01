@@ -13,17 +13,6 @@
 # with the last (consurf_grade 9) being open ended so +3.5->infinity
 
 import sys
-import os
-
-# Read in the original PDB numbering scheme if the file exists
-if os.path.exists('r4s_pdb.py'):  
-    if os.path.exists('seqres.fasta'): # If this exists we ignore the renumber file here
-        WAS_A_PDB = 0
-    else:
-        from r4s_pdb import R4S_2_PDB
-        WAS_A_PDB = 1
-else:
-    WAS_A_PDB = 0
 
 INFILE = open(sys.argv[1], "r")
 OUTFILE = open(sys.argv[2], "w")
@@ -75,10 +64,6 @@ for LINE in INFILE:
         continue
     resnum, resname, in3, *junk = [x.strip() for x in LINE.split()] # Read in Res Name/Num/Score
     score = float(in3)
-    if WAS_A_PDB == 1:
-        original = (R4S_2_PDB.get(resnum)) # get the 'original' resnumber from the initial pdb file
-    else:
-        original = resnum # We had a fasta file so no original number
     threeletter = (RESIDUETAB.get(resname)) # Get the three letter code
 
     # now take each score and test it against the coloured bins for consurf grades
@@ -90,12 +75,12 @@ for LINE in INFILE:
         if lower <= score < upper: # find bins for residues
             #print(resnum,resname,threeletter,original,score,binnumber)
             OUTLINE = "{:>4s}  ".format(resnum) + "{:1s}  ".format(resname) + \
-                      "{:3s} ".format(threeletter) + "{:>4s}    ".format(original) + \
+                      "{:3s} ".format(threeletter) + "{:>4s}    ".format(resnum) + \
                       "{:d}   ".format(binnumber) + "{:>6.3f} ".format(score) + "\n"
             OUTFILE.write(OUTLINE)
         if binnumber == 1 and score >= upper: # Catch the ones above 1
             #print(resnum,resname,threeletter,original,score,binnumber)
             OUTLINE = "{:>4s}  ".format(resnum) + "{:1s}  ".format(resname) + \
-                      "{:3s} ".format(threeletter) + "{:>4s}    ".format(original) + \
+                      "{:3s} ".format(threeletter) + "{:>4s}    ".format(resnum) + \
                       "{:d}   ".format(binnumber) + "{:>6.3f} ".format(score) + "\n"
             OUTFILE.write(OUTLINE)
