@@ -58,7 +58,7 @@ WIDTH = LOWEST / -4.5
 OUTLINE = "  # SEQ 3LETT PDB COLOUR  SCORE \n"
 OUTFILE.write(OUTLINE)
 
-#Set up the 9 bins ranges - not bin 1 doesn't have an upper range
+#Set up the 9 bins ranges - note bin 1 doesn't have an upper range
 for LINE in INFILE:
     if LINE[0:1] == "#" or LINE == "\n": # look for lines without leading # and are not blank
         continue
