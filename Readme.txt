@@ -11,22 +11,22 @@ It uses the 300 top acceptable homologs
 
 To run you need a directory structure such as
 
-/top/consurf_scripts
+/.../consurf_scripts
     /pdbidchain    e.g. 1fnfa
     /pdbidchain/file.pdb    - a single chain pdb file
     or
     /pdbidchain/file.fasta  - a single chain fasta file
 
-Usage: consurf_home.sh file
+Usage: consurf_home.sh [file.pdb|file.fasta]
        consurf_seqres file.pdb
 
-To run it if you have a pdb file as:
+To run it if you have a pdb coordinate file as:
    $consurf_scripts/consurf_home.sh file.pdb
 
 To run it if you have a fasta file as:
    $consurf_scripts/consurf_home.sh file.fasta
 
-If you want to use the SEQRES records from the pdb file instead of the ATOM records then:
-   $consurf_scripts/consurf_seqres.sh file.fasta
+If you want to use the SEQRES records from the pdb file instead of the ATOM records then use:
+   $consurf_scripts/consurf_seqres.sh file.pdb
 Note the numbering will run from 1->X however
 
