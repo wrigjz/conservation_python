@@ -7,6 +7,10 @@
 #########################################################################################################################
 #
 This is an implimentation of the consurf system
+Requirements:
+python3 with BioPython (such as anaconda), uniref90 db, HMMER, CD-Hit, Mapsci, 
+Protest and rate4site
+
 It takes a single chain pdb file (often provided from critires) or a single chain fasta file
 It uses the 300 top acceptable homologs 
 
