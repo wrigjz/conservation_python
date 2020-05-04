@@ -52,7 +52,7 @@ elif [ $extension == "fasta" ]; then
     echo '>PDB_ATOM' >| cons.fasta
     grep -v '^>' $1 >> cons.fasta
 else 
-    echo "You need to give either .pdn or .fasta file"
+    echo "You need to give either .pdb or .fasta file"
     exit 1
 fi
 
