@@ -8,7 +8,7 @@
 #
 # Read the rete4site result files, then
 # Split the scores into grades, this is done by takeing the (already normalised) scores
-# and swetting the most negative score as equal to-4.5 bin WIDTHs, we then assign
+# and setting the most negative score as equal to-4.5 bin WIDTHs, we then assign
 # all the numbers into equal bin WIDTHs -4.5->-3.5 ... -0.5->+0.5
 # with the last (consurf_grade 9) being open ended so +3.5->infinity
 
