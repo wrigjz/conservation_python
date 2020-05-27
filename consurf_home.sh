@@ -38,7 +38,7 @@ scripts=consurf_scripts
 
 # Remove output from previous runs
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
-/bin/rm -rf frequency.aln consurf_home.grades frequency.txt cons.fasta
+/bin/rm -rf consurf_home.grades frequency.txt cons.fasta
 /bin/rm -rf homologs.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
 # Work out if we are doing a pdb file or a fasta file
@@ -77,13 +77,11 @@ python3 ../$scripts/select_seqs.py cons.fasta cdhit.out
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
-$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --clustalout \
-  --thread $threads --namelength 30 ./accepted.fasta >| ./postalignment.aln
 $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 \
-  --thread $threads --namelength 30 ./accepted.fasta >| frequency.aln
+  --thread $threads --namelength 30 ./accepted.fasta >| ./postalignment.aln
 
 # Calculate the residue frequencies for homologs aligned to the inital given sequence
-python3 ../$scripts/get_frequency.py frequency.aln >| frequency.txt
+python3 ../$scripts/get_frequency.py postalignment.aln >| frequency.txt
 
 # Get the best protein matrix
 echo "Running Prottest"
