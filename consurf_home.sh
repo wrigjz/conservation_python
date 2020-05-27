@@ -77,9 +77,9 @@ python3 ../$scripts/select_seqs.py cons.fasta cdhit.out
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
-$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --clustalout \
+$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --clustalout \
   --thread $threads --namelength 30 ./accepted.fasta >| ./postalignment.aln
-$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder \
+$mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 \
   --thread $threads --namelength 30 ./accepted.fasta >| frequency.aln
 
 # Calculate the residue frequencies for homologs aligned to the inital given sequence

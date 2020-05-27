@@ -12,7 +12,7 @@
 # in order of most common first
 
 # usage:
-# $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --reorder --namelength 30  \
+# $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 --namelength 30  \
 #        unaligned.fast.fasta >| frequency.fasta
 # python3 get_frequency.py frequency.fasta >| frequency.txt
 
