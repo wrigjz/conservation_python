@@ -94,7 +94,7 @@ for i in range(1, INDEX+1):
 # We use local algnment becasue we are looking for overgaps not a full-algnment
 # We set the mismatch and gap penalties to -10 because they would not exist in an overlap
 # percentage >= 10 means too much overkap so we reject the shorted chain
-for i in range(1, INDEX+1):
+for i in range(1, INDEX):
     for j in range(i+1, INDEX+1):
         if SHORT_TITLE[i] == SHORT_TITLE[j]:
             length1 = len(SEQUENCE[i])
