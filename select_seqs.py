@@ -130,7 +130,7 @@ if REMAINING < 6:
     print("Not enough homologs for conservation analysis: ", INDEX, REMAINING)
     exit()
 
-# Write out the target SEQUENCE first to each of the accepted files
+# Write out the target SEQUENCE first to the accepted file
 PREALIGN.write(MERGED_LIST_ACC[0][0])
 PREALIGN.write("\n")
 PREALIGN.write(MERGED_LIST_ACC[0][1])
@@ -146,18 +146,12 @@ if REMAINING <= 300:
 
 # Write out the top 300 file if there are more than 300 accepted homologue
 if REMAINING > 300:
-    # Here we try to write out 300 that evenly sample the remaining homologs
-    #INTERVAL = int(REMAINING /300) # Calculate the interval for the 300 samples
-    #for i in range(1, REMAINING, INTERVAL):
-    # Here we write out the top 300
     for i in range(1, 301):
         PREALIGN.write(MERGED_LIST_ACC[i][0])
         PREALIGN.write("\n")
         PREALIGN.write(MERGED_LIST_ACC[i][1])
         PREALIGN.write("\n")
-
-# Close the prealign file
-PREALIGN.close()
+PREALIGN.close() # Close the prealign file
 
 # Loop back over the rejected sequences and print them out with a reason
 for i in range(0, REJECTED):
@@ -167,4 +161,12 @@ for i in range(0, REJECTED):
     REJECTFILE.write("\n")
     REJECTFILE.write(MERGED_LIST_REJ[i][1])
     REJECTFILE.write("\n")
-REJECTFILE.close()
+
+# Now write to the reject file any that were accetable but we already had enough
+for i in range(302, REMAINING):
+    REJECTFILE.write(MERGED_LIST_ACC[i][0])
+    REJECTFILE.write("\n")
+    REJECTFILE.write("Was acceptable but we already had 300\n")
+    REJECTFILE.write(MERGED_LIST_ACC[i][1])
+    REJECTFILE.write("\n")
+REJECTFILE.close() # Close the reject file
