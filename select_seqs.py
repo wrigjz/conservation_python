@@ -126,7 +126,7 @@ REMAINING = len(MERGED_LIST_ACC)
 REJECTED = len(MERGED_LIST_REJ)
 
 # If there are not enough homologs, min of 5, we stop at this point
-if REMAINING < 4:
+if REMAINING < 6:
     print("Not enough homologs for conservation analysis: ", INDEX, REMAINING)
     exit()
 
@@ -136,7 +136,7 @@ PREALIGN.write("\n")
 PREALIGN.write(MERGED_LIST_ACC[0][1])
 PREALIGN.write("\n")
 
-# If there are < 300 remaining, write them all out
+# If there are < 300 remaining, write them all out, start at 1 because the target is  0
 if REMAINING <= 300:
     for i in range(1, REMAINING):
         PREALIGN.write(MERGED_LIST_ACC[i][0])
