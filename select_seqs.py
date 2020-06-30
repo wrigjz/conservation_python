@@ -94,7 +94,7 @@ for i in range(1, INDEX+1):
 # We use local algnment becasue we are looking for overgaps not a full-algnment
 # We set the mismatch and gap penalties to -10 because they would not exist in an overlap
 # percentage >= 10 means too much overkap so we reject the shorted chain
-FAST_OPTION = 0
+FOUND_ACCEPTED = 0
 for i in range(1, INDEX):
     if REJECT[i] == "Acceptable": # if it's not an acceptbale one then don't check
         for j in range(i+1, INDEX+1):
@@ -118,8 +118,8 @@ for i in range(1, INDEX):
                         REJECT[shorter_seq] = "Overlaps with itself elsewhere: " \
                             + str(percentage_digits)
         if REJECT[i] == "Acceptable": # This one is still acceptable so increment the counter
-            FAST_OPTION += 1
-        if FAST_OPTION == 300: # We have found enough, lets stop checking and go to writing out
+            FOUND_ACCEPTED += 1
+        if FOUND_ACCEPTED == 300: # We have found enough, lets stop checking and go to writing out
             break
 
 # At this point we need to create a new list of those that are acceptable
