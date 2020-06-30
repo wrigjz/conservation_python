@@ -106,11 +106,13 @@ for i in range(1, INDEX):
                     if length2 > length1:
                         longer = length2
                         shorter_seq = i
-                        alignments = pairwise2.align.localms(SEQUENCE[i], SEQUENCE[j], 1, -10, -10, -1)
+                        alignments = pairwise2.align.localms(SEQUENCE[i], \
+                            SEQUENCE[j], 1, -10, -10, -1)
                     else:
                         longer = length1
                         shorter_seq = j
-                        alignments = pairwise2.align.localms(SEQUENCE[j], SEQUENCE[i], 1, -10, -10, -1)
+                        alignments = pairwise2.align.localms(SEQUENCE[j], \
+                            SEQUENCE[i], 1, -10, -10, -1)
                     score = alignments[0][2]
                     percentage = (score/longer) * 100
                     percentage_digits = round(percentage, 2)
