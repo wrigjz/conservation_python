@@ -96,33 +96,32 @@ for i in range(1, INDEX+1):
 # percentage >= 10 means too much overkap so we reject the shorted chain
 FOUND_ACCEPTED = 0
 for i in range(1, INDEX):
-    if REJECT[i] == "Acceptable": # if it's not an acceptbale one then don't check
-        for j in range(i+1, INDEX+1):
-            if REJECT[j] == "Acceptable": # If it's not acceptable one then don't check
-                if SHORT_TITLE[i] == SHORT_TITLE[j]:
-                    length1 = len(SEQUENCE[i])
-                    length2 = len(SEQUENCE[j])
-                    # Now do the choosing only pick #2 is if is longer than #1
-                    if length2 > length1:
-                        longer = length2
-                        shorter_seq = i
-                        alignments = pairwise2.align.localms(SEQUENCE[i], \
-                            SEQUENCE[j], 1, -10, -10, -1)
-                    else:
-                        longer = length1
-                        shorter_seq = j
-                        alignments = pairwise2.align.localms(SEQUENCE[j], \
-                            SEQUENCE[i], 1, -10, -10, -1)
-                    score = alignments[0][2]
-                    percentage = (score/longer) * 100
-                    percentage_digits = round(percentage, 2)
-                    if percentage >= 10:
-                        REJECT[shorter_seq] = "Overlaps with itself elsewhere: " \
-                            + str(percentage_digits)
-        if REJECT[i] == "Acceptable": # This one is still acceptable so increment the counter
-            FOUND_ACCEPTED += 1
-        if FOUND_ACCEPTED == 300: # We have found enough, lets stop checking and go to writing out
-            break
+    for j in range(i+1, INDEX+1):
+        if SHORT_TITLE[i] == SHORT_TITLE[j]:
+            length1 = len(SEQUENCE[i])
+            length2 = len(SEQUENCE[j])
+            # Now do the choosing only pick #2 is if is longer than #1
+            if length2 > length1:
+                longer = length2
+                shorter_seq = i
+                alignments = pairwise2.align.localms(SEQUENCE[i], \
+                    SEQUENCE[j], 1, -10, -10, -1)
+            else:
+                longer = length1
+                shorter_seq = j
+                alignments = pairwise2.align.localms(SEQUENCE[j], \
+                    SEQUENCE[i], 1, -10, -10, -1)
+            score = alignments[0][2]
+            percentage = (score/longer) * 100
+            percentage_digits = round(percentage, 2)
+            if percentage >= 10:
+                REJECT[shorter_seq] = "Overlaps with itself elsewhere: " \
+                    + str(percentage_digits)
+    # After the above test check if still acceptablr if so increment the counter
+    if REJECT[i] == "Acceptable":
+        FOUND_ACCEPTED += 1
+    if FOUND_ACCEPTED == 300: # We have found enough, lets stop checking and go to writing out
+        break
 
 # At this point we need to create a new list of those that are acceptable
 # so we can loop over these later looking for whatever sets we want to make
