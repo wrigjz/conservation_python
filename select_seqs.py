@@ -175,7 +175,7 @@ for i in range(0, REJECTED):
 for i in range(301, REMAINING):
     REJECTFILE.write(MERGED_LIST_ACC[i][0])
     REJECTFILE.write("\n")
-    REJECTFILE.write("Was acceptable but we already had 300\n")
+    REJECTFILE.write("Possibly acceptable but we already had 300 so never checked it fully\n")
     REJECTFILE.write(MERGED_LIST_ACC[i][1])
     REJECTFILE.write("\n")
 REJECTFILE.close() # Close the reject file
