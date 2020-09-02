@@ -120,6 +120,18 @@ if [ $? -ne 0 ] ; then
     $rate4sitedir/rate4site.old_slow -ib -a 'PDB_ATOM' -s ./postalignment.aln -zn $rate_model -bn \
        -l ./r4s.log -o ./r4s.res  -x r4s.txt >| r4s.out
 fi
+# Check if both rate4site fail, if so try the 150 homologue version
+if [ $? -ne 0 ] ; then
+    echo "R4S 3.0 and 2.0 failed so we'll try the 150 homolog  version"
+    $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 \
+      --thread $threads --namelength 30 ./150.fasta >| ./150.aln
+    $rate4sitedir/rate4site -ib -a 'PDB_ATOM' -s ./150.aln -zn $rate_model -bn \
+       -l ./r4s.log -o ./r4s.res  -x r4s.txt >| r4s.out
+fi
+if [ $? -ne 0 ] ; then
+    echo "We totally failed to get rate4site to work - sorry!"
+    exit
+fi
 
 # Turn those scores into grades
 PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades

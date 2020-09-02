@@ -29,6 +29,7 @@ if len(sys.argv) != 3:
 TARGETFILE = open(sys.argv[1], "r")
 INFILE = open(sys.argv[2], "r")
 PREALIGN = open("accepted.fasta", "w")
+PA150 = open("150.fasta", "w")
 REJECTFILE = open("rejected.fasta", "w")
 
 # Intial setup is for 100000 sequences
@@ -161,6 +162,25 @@ if REMAINING > 300:
         PREALIGN.write(MERGED_LIST_ACC[i][1])
         PREALIGN.write("\n")
 PREALIGN.close() # Close the prealign file
+
+# At this point we write out a list of 150 in case rate4site fails
+PA150.write(MERGED_LIST_ACC[0][0])
+PA150.write("\n")
+PA150.write(MERGED_LIST_ACC[0][1])
+PA150.write("\n")
+if REMAINING <= 150:
+    for i in range(1, REMAINING):
+        PA150.write(MERGED_LIST_ACC[i][0])
+        PA150.write("\n")
+        PA150.write(MERGED_LIST_ACC[i][1])
+        PA150.write("\n")
+elif REMAINING > 150:
+    for i in range(1, 151):
+        PA150.write(MERGED_LIST_ACC[i][0])
+        PA150.write("\n")
+        PA150.write(MERGED_LIST_ACC[i][1])
+        PA150.write("\n")
+PA150.close() # Close the prealign file
 
 # Loop back over the rejected sequences and print them out with a reason
 for i in range(0, REJECTED):
