@@ -70,19 +70,19 @@ for TMLINE in INFILE:
         resname = TMLINE[17:20]
         atom_name = TMLINE[12:16]
         chain = TMLINE[21:22]
-        resid_long = str(TMLINE[22:27])
+        RESID_LONG = str(TMLINE[22:27])
         # This block looks for a change in the residue number  , and prints out the 1 letter codes
-        if PREVIOUS_RESNO != resid_long:
+        if PREVIOUS_RESNO != RESID_LONG:
             INDEX += 1
             # Make a note of the residue number for the next line we look at
-            PREVIOUS_RESNO = resid_long
+            PREVIOUS_RESNO = RESID_LONG
             # Convert from 3 letter code to single letter code and print it out
             if resname in RESIDUETAB:
-                single = str(RESIDUETAB.get(resname))
-                print(single, end="")
+                SINGLE = str(RESIDUETAB.get(resname))
+                print(SINGLE, end="")
             else:
                 print(".", end="")
-            if single != "":
+            if SINGLE != "":
                 R4SINDEX += 1
                 outline = "    '" + "{:>d}".format(R4SINDEX) + "' : '" + "{:>d}".format(INDEX) \
                        + "' ,\n"

@@ -24,7 +24,7 @@ from Bio import pairwise2
 
 if len(sys.argv) != 3:
     print("Please give reference fasta file and the homologs fasta file.")
-    exit()
+    sys.exit()
 
 TARGETFILE = open(sys.argv[1], "r")
 INFILE = open(sys.argv[2], "r")
@@ -138,7 +138,7 @@ REJECTED = len(MERGED_LIST_REJ)
 # If there are not enough homologs, min of 5, we stop at this point
 if REMAINING < 6:
     print("Not enough homologs for conservation analysis: ", INDEX, REMAINING)
-    exit()
+    sys.exit()
 
 # Write out the target SEQUENCE first to the accepted file
 PREALIGN.write(MERGED_LIST_ACC[0][0])

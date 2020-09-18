@@ -69,7 +69,7 @@ for TMLINE in INFILE:
             for i in range(0, residue_number):
                 #print(RESIDUE[i])
                 if RESIDUE[i] in RESIDUETAB:
-                    single = str(RESIDUETAB.get(RESIDUE[i]))
-                    print(single, end="")
+                    SINGLE = str(RESIDUETAB.get(RESIDUE[i]))
+                    print(SINGLE, end="")
                 else:
                     print(".", end="")
