@@ -80,7 +80,7 @@ $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 \
   --thread $threads --namelength 30 ./accepted.fasta >| ./postalignment.aln
 
 # Calculate the residue frequencies for homologs aligned to the inital given sequence
-python3 ../$consscripts/get_frequency.py psotalignment.aln >| frequency.txt
+python3 ../$consscripts/get_frequency.py postalignment.aln >| frequency.txt
 
 # Get the best protein matrix
 echo "Running Prottest"
