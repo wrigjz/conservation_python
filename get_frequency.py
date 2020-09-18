@@ -21,7 +21,7 @@ import sys
 
 if len(sys.argv) != 2:
     print("Please give the aligned fasta file.")
-    exit()
+    sys.exit()
 
 INFILE = open(sys.argv[1], "r")
 
@@ -198,9 +198,11 @@ for i in range(0, ALIGNED_LENGTH):     # Loop over each residues in the target s
 
         # Finally print the results
         print("Seq:", "{:>2}".format(SEQUENCE[0][i]), "{:>4}".format(POSITION[i]), "/",\
-              "{:>4}".format(INDEX), end=" ")
-        res_list = ""
+              "{:>3}".format(INDEX), end="  ")
+        RES_LIST = ""
         array_len = len(MAX_ARRAY)
         for j in range(0, array_len):
-            res_list = res_list + MAX_ARRAY[j][0] + ", "
-        print(res_list)
+            FREQUENCY = str(MAX_ARRAY[j][1]) # Get the frequency of the residue type
+            FREQUENCY3 = FREQUENCY.zfill(3) # Fill it out to 3 characters
+            RES_LIST = RES_LIST + MAX_ARRAY[j][0] + FREQUENCY3 + ", "
+        print(RES_LIST)
