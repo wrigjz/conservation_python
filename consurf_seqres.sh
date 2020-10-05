@@ -35,7 +35,7 @@ cdhitdir=/home/programs/cd-hit-v4.6.8-2017-0621
 mafftdir=/home/programs/mafft-7.294/
 rate4sitedir=/home/programs/rate4site-3.0.0/src/rate4site/
 prottestdir=/home/programs/prottest-3.4.2
-consscripts=consurf_scripts
+consscripts=../consurf_scripts
 
 # Remove output from previous runs
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
@@ -52,8 +52,8 @@ fi
 # generate the fasta file from the given pdb file
 # We do this twice to help with critires numbering
 echo "Creating Fasta file"
-python3 ../$consscripts/mk_fasta.py $1 >| cons.fasta
-python3 ../$consscripts/mk_fasta_from_seqres.py original.pdb ${chain^}  >| seqres.fasta
+python3 $consscripts/mk_fasta.py $1 >| cons.fasta
+python3 $consscripts/mk_fasta_from_seqres.py original.pdb ${chain^}  >| seqres.fasta
 
 # Jackhmmer the blast database looking for homologs
 echo "Jackhmmering the Uniref90 DB"
@@ -72,7 +72,7 @@ echo "Clustering using cdhit and selecting the sequences"
 $cdhitdir/cd-hit -i ./homologs.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 
 echo "Rejecting some sequences"
-python3 ../$consscripts/select_seqs.py seqres.fasta cdhit.out
+python3 $consscripts/select_seqs.py seqres.fasta cdhit.out
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
@@ -80,7 +80,7 @@ $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 \
   --thread $threads --namelength 30 ./accepted.fasta >| ./postalignment.aln
 
 # Calculate the residue frequencies for homologs aligned to the inital given sequence
-python3 ../$consscripts/get_frequency.py postalignment.aln >| frequency.txt
+python3 $consscripts/get_frequency.py postalignment.aln >| frequency.txt
 
 # Get the best protein matrix
 echo "Running Prottest"
@@ -121,5 +121,5 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Turn those scores into grades
-PYTHONPATH=. python3 ../$consscripts/r4s_to_grades.py r4s.res seqres.grades
+PYTHONPATH=. python3 $consscripts/r4s_to_grades.py r4s.res seqres.grades
 paste seqres.grades frequency.txt >| seqres_home.grades

@@ -34,7 +34,7 @@ cdhitdir=/home/programs/cd-hit-v4.6.8-2017-0621
 mafftdir=/home/programs/mafft-7.294/
 rate4sitedir=/home/programs/rate4site-3.0.0/src/rate4site/
 prottestdir=/home/programs/prottest-3.4.2
-scripts=consurf_scripts
+scripts=../consurf_scripts
 
 # Remove output from previous runs
 /bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
@@ -46,7 +46,7 @@ extension="${1#*.}"
 if [ $extension == "pdb" ]; then
     # generate the fasta file from the given pdb file
     echo "Creating Fasta file"
-    python3 ../$scripts/mk_fasta.py $1  >| cons.fasta
+    python3 $scripts/mk_fasta.py $1  >| cons.fasta
 elif [ $extension == "fasta" ]; then
     # Copy the given fasta sequence to cons.fasta and give it the title PDB_ATOM
     echo '>PDB_ATOM' >| cons.fasta
@@ -73,7 +73,7 @@ echo "Clustering using cdhit and selecting the sequences"
 $cdhitdir/cd-hit -i ./homologs.fasta -o ./cdhit.out -c 0.95 >| cdhit.log
 
 echo "Rejecting some sequences"
-python3 ../$scripts/select_seqs.py cons.fasta cdhit.out
+python3 $scripts/select_seqs.py cons.fasta cdhit.out
 
 # Use mapsci to produce an alignment
 echo "Aligning the final sequences"
@@ -81,7 +81,7 @@ $mafftdir/bin/mafft-linsi --quiet --localpair --maxiterate 1000 \
   --thread $threads --namelength 30 ./accepted.fasta >| ./postalignment.aln
 
 # Calculate the residue frequencies for homologs aligned to the inital given sequence
-python3 ../$scripts/get_frequency.py postalignment.aln >| frequency.txt
+python3 $scripts/get_frequency.py postalignment.aln >| frequency.txt
 
 # Get the best protein matrix
 echo "Running Prottest"
@@ -134,5 +134,5 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Turn those scores into grades
-PYTHONPATH=. python3 ../$scripts/r4s_to_grades.py r4s.res initial.grades
+PYTHONPATH=. python3 $scripts/r4s_to_grades.py r4s.res initial.grades
 paste initial.grades frequency.txt >| consurf_home.grades
