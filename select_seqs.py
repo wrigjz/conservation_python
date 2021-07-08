@@ -138,6 +138,14 @@ REJECTED = len(MERGED_LIST_REJ)
 # If there are not enough homologs, min of 5, we stop at this point
 if REMAINING < 6:
     print("Not enough homologs for conservation analysis: ", INDEX, REMAINING)
+# Loop back over the rejected sequences and print them out with a reason
+    for i in range(0, REJECTED):
+        REJECTFILE.write(MERGED_LIST_REJ[i][0])
+        REJECTFILE.write("\n")
+        REJECTFILE.write(MERGED_LIST_REJ[i][2])
+        REJECTFILE.write("\n")
+        REJECTFILE.write(MERGED_LIST_REJ[i][1])
+        REJECTFILE.write("\n")
     sys.exit()
 
 # Write out the target SEQUENCE first to the accepted file

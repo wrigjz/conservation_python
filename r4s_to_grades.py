@@ -69,9 +69,10 @@ for LINE in INFILE:
     # now take each score and test it against the coloured bins for consurf grades
     # if it matches then print it out with the grade
     for i in range(0, 9):
-        lower = LOWEST + (i * WIDTH)
-        upper = lower + WIDTH
+        lower = round(LOWEST + (i * WIDTH), 5)
+        upper = round(lower + WIDTH, 5)
         binnumber = 9 - i
+        #print(resnum,resname,score,upper,lower,binnumber,"\n")
         if lower <= score < upper: # find bins for residues
             #print(resnum,resname,threeletter,original,score,binnumber)
             OUTLINE = "{:>4s}  ".format(resnum) + "{:1s}  ".format(resname) + \
