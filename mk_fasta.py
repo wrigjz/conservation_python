@@ -41,6 +41,7 @@ RESIDUETAB = {
     'TYR' : 'Y',
     'TRP' : 'W',
     'CYX' : 'C',
+    'CYM' : 'C',
     'HSP' : 'H',
     'HSD' : 'H',
     'HSE' : 'H',
@@ -49,6 +50,7 @@ RESIDUETAB = {
     'HIE' : 'H',
     'ACE' : '',
     'NME' : '',
+    ' ZN' : '',
 }
 
 # Get the output name from the command line
