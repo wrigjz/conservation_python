@@ -23,9 +23,7 @@ root/working/file.fasta # a single chain fasta file
 
 Usage:
 
-consurf_home.sh [file.pdb|file.fasta]
-
-consurf_seqres file.pdb
+consurf_home.sh [file.pdb|file.fasta] or consurf_seqres file.pdb
 
 To run it if you have a pdb coordinate file as:
    $consurf_scripts/consurf_home.sh file.pdb
