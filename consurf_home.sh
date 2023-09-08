@@ -26,7 +26,7 @@ else
 fi
 
 # setup anaconda environment
-source /home/programs/anaconda/linux_202105/init.sh
+source /home/programs/anaconda/linux_202307/init.sh
 dbdir=/scratch/consurf_db
 blastdir=/home/programs/ncbi-blast/ncbi-blast-2.9.0_linux
 hmmerdir=/home/programs/hmmer-3.1b2/linux
