@@ -9,7 +9,7 @@
 # A simple script to replciate Consurf it looks at using the SEQRES records
 
 # Usage consurf_home fileX.pdb
-# Although here we always use original.pdb but we then have to use a pdb file from 
+# Although here we always use original.pdb but we then have to use a pdb file from
 # THe atom numbers to be able to match with critires later
 
 if [ "$#" -ne 1 ]; then
@@ -27,7 +27,7 @@ else
 fi
 
 # setup anaconda environment
-source /home/programs/anaconda/linux-5.3.6/init.sh
+source /home/programs/anaconda/linux_202105/init.sh
 dbdir=/scratch/consurf_db
 blastdir=/home/programs/ncbi-blast/ncbi-blast-2.9.0_linux
 hmmerdir=/home/programs/hmmer-3.1b2/linux
@@ -38,7 +38,7 @@ prottestdir=/home/programs/prottest-3.4.2
 consscripts=../consurf_scripts
 
 # Remove output from previous runs
-/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
+/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp
 /bin/rm -rf consurf_home.grades frequency.txt seqres.fasta
 /bin/rm -rf homologs.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
@@ -47,7 +47,7 @@ if [ ! -e "original_chain.txt" ] ; then
     echo "No orignial_chain.txt file to get the chain id from"
 else
     chain=`cat original_chain.txt`
-fi 
+fi
 
 # generate the fasta file from the given pdb file
 # We do this twice to help with critires numbering
@@ -99,7 +99,7 @@ elif [ "$best_model" == "WAG" ] ; then
     rate_model="-Mw"
 elif [ "$best_model" == "CpREV" ] ; then
     rate_model="-MC"
-else 
+else
     rate_model="-Mj"
 fi
 

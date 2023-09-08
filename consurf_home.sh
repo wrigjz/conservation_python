@@ -26,7 +26,7 @@ else
 fi
 
 # setup anaconda environment
-source /home/programs/anaconda/linux-5.3.6/init.sh
+source /home/programs/anaconda/linux_202105/init.sh
 dbdir=/scratch/consurf_db
 blastdir=/home/programs/ncbi-blast/ncbi-blast-2.9.0_linux
 hmmerdir=/home/programs/hmmer-3.1b2/linux
@@ -37,7 +37,7 @@ prottestdir=/home/programs/prottest-3.4.2
 scripts=../consurf_scripts
 
 # Remove output from previous runs
-/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp 
+/bin/rm -rf uniref90_list.txt prealignment.fasta postalignment.aln accepted.fasta uniref.tmp
 /bin/rm -rf consurf_home.grades frequency.txt cons.fasta
 /bin/rm -rf homologs.fasta r4s_pdb.py initial.grades r4s.res prottest.out cdhit.log r4s.out
 
@@ -51,7 +51,7 @@ elif [ $extension == "fasta" ]; then
     # Copy the given fasta sequence to cons.fasta and give it the title PDB_ATOM
     echo '>PDB_ATOM' >| cons.fasta
     grep -v '^>' $1 >> cons.fasta
-else 
+else
     echo "You need to give either .pdb or .fasta file"
     exit 1
 fi
@@ -100,7 +100,7 @@ elif [ "$best_model" == "WAG" ] ; then
     rate_model="-Mw"
 elif [ "$best_model" == "CpREV" ] ; then
     rate_model="-MC"
-else 
+else
     rate_model="-Mj"
 fi
 
