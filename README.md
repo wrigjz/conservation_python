@@ -7,6 +7,8 @@
 #########################################################################################################################
 #
 This is an implimentation of the consurf system
+This code has been tested on Centos 7.x and Ubuntu 22.04
+
 Requirements:
 python3 with BioPython (such as anaconda), uniref90 db, HMMER, CD-Hit, Mapsci,
 Protest and rate4site
@@ -14,16 +16,7 @@ Protest and rate4site
 It takes a single chain pdb file (often provided from critires) or a single chain fasta file
 It uses the 300 top acceptable homologs
 
-To run you need a directory structure such as
-
-root/consurf_scripts   # These scripts
-root/working/file.pdb  # a single chain pdb file
-    or
-root/working/file.fasta # a single chain fasta file
-
-Usage:
-
-consurf_home.sh file.pdb|file.fasta or consurf_seqres file.pdb
+Each CS run must be done in a separate directory with a fasta or pdb file c$as the input
 
 To run it if you have a pdb coordinate file as:
    $consurf_scripts/consurf_home.sh file.pdb
