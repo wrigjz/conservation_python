@@ -16,7 +16,7 @@ Protest and rate4site
 It takes a single chain pdb file (often provided from critires) or a single chain fasta file
 It uses the 300 top acceptable homologs
 
-Each CS run must be done in a separate directory with a fasta or pdb file c$as the input
+Each CS run must be done in a separate directory with a fasta or pdb file as the input
 
 To run it if you have a pdb coordinate file as:
    $consurf_scripts/consurf_home.sh file.pdb
