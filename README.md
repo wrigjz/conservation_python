@@ -31,6 +31,7 @@ Note the numbering will run from 1->X however
 
 
 Options used by programs are:
+
 jackhmmer: -E 0.0001 --domE 0.0001 --incE 0.0001 -N 1
 
 cdhit: -c 0.95
