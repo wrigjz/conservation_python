@@ -7,7 +7,7 @@
 #########################################################################################################################
 #
 This is an implimentation of the consurf system
-This code has been tested on Centos 7.x and Ubuntu 22.04
+This code has been tested on Centos 7.x and Ubuntu 22.04 as a standalone desktop and on a multi-core system under PBS
 
 Requirements:
 python3 with BioPython (such as anaconda), uniref90 db, HMMER, CD-Hit, Mapsci,
@@ -28,3 +28,15 @@ If you want to use the SEQRES records from the pdb file instead of the ATOM reco
    $consurf_scripts/consurf_seqres.sh file.pdb
 
 Note the numbering will run from 1->X however
+
+
+Options used by programs are:
+jackhmmer: -E 0.0001 --domE 0.0001 --incE 0.0001 -N 1
+
+cdhit: -c 0.95
+
+mafft-linsi: --quiet --localpair --maxiterate 1000 --namelength 30
+
+protest: -JTT -LG -MtREV -Dayhoff -WAG -CpREV -S 1
+
+rate4site: -ib -zn $MODEL_FROM_PROTEST -bn
